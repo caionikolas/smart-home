@@ -1,0 +1,37 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Local {
+  id        String    @id
+  nome      String
+  descricao String
+  ambientes Ambient[]
+}
+
+model Ambient {
+  id        String    @id
+  nome      String
+  descricao String
+  devices   Devices[]
+  Local     Local?    @relation(fields: [localId], references: [id])
+  localId   String?
+}
+
+model Devices {
+  id        String   @id
+  nome      String
+  descricao String
+  online    Boolean
+  ligado    Boolean
+  Ambient   Ambient? @relation(fields: [ambientId], references: [id])
+  ambientId String?
+}
